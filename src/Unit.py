@@ -16,41 +16,20 @@
 ________________
 |_File_History_|________________________________________________________________
 |_Programmer______|_Date_______|_Comments_______________________________________
-| Max Marshall    | 2023-01-01 | Created File
+| Max Marshall    | 2023-01-02 | Created File
 |
 |
 |
 """
 from Faction import Faction
-from Unit import Unit
 
-class Cell:
-	def __init__(self, faction, unit=None, capital=False):
-		self.faction = faction
-		self.unit = unit
-		self.capital = capital
+class Unit:
+	def __init__(self, char):
+		self.char = char
 
 	def __str__(self):
-		string = "\033[0m\033"
-		if self.capital:
-			string += "[{}m".format(40)
-		else:
-			string += "[{}m".format(self.faction.color+100)
-		if self.unit is not None:
-			string += "\033[{}m{}".format(30,self.unit)
-		else:
-			string += " "
-		string += "\033[0m"
-		return string
-
-	def __repl__(self):
-		return str(self)
-
-
+		return self.char
 
 
 if __name__ == '__main__':
-	faction = Faction(1)
-	unit = Unit("@")
-	test = Cell(faction, unit, False)
-	print(test)
+	test = Unit()
