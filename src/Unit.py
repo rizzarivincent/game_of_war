@@ -21,7 +21,6 @@ ________________
 |
 |
 """
-from Faction import Faction
 
 class Unit:
 	def __init__(self, char):
@@ -29,6 +28,19 @@ class Unit:
 
 	def __str__(self):
 		return self.char
+
+
+class Shieldbearer(Unit):
+	def __init__(self):
+		super().__init__("U")
+
+class Knight(Unit):
+	def __init__(self):
+		super().__init__("@")
+
+class Spearman(Unit):
+	def __init__(self):
+		super().__init__("/")
 
 
 if __name__ == '__main__':

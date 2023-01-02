@@ -22,7 +22,8 @@ ________________
 |
 """
 from Faction import Faction
-from Unit import Unit
+from Unit import Unit, Shieldbearer, Knight, Spearman
+import random
 
 class Cell:
 	def __init__(self, faction, unit=None, capital=False):
@@ -33,24 +34,32 @@ class Cell:
 	def __str__(self):
 		string = "\033[0m\033"
 		if self.capital:
-			string += "[{}m".format(40)
-		else:
 			string += "[{}m".format(self.faction.color+100)
+		else:
+			string += "[{}m".format(self.faction.color+40)
 		if self.unit is not None:
-			string += "\033[{}m{}".format(30,self.unit)
+			string += "\033[1;{0}m{1}".format(37,self.unit)
 		else:
 			string += " "
 		string += "\033[0m"
 		return string
 
-	def __repl__(self):
+	def __repr__(self):
 		return str(self)
 
 
 
 
 if __name__ == '__main__':
-	faction = Faction(1)
-	unit = Unit("@")
-	test = Cell(faction, unit, False)
-	print(test)
+	x = 80
+	y = 22
+	factions = [Faction(1),Faction(2),Faction(0),Faction(3),Faction(4),Faction(5),Faction(6)]
+	grid = [[Cell(random.choice(factions)) for _ in range(x)] for _ in range(y)]
+	for _ in range(20):
+		row = random.choice(grid)
+		cell = random.choice(row)
+		cell.unit = random.choice([Shieldbearer,Knight,Spearman])()
+	for row in grid:
+		for column in row:
+			print(column,end="")
+		print()
