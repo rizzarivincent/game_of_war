@@ -26,7 +26,7 @@ from Unit import Unit, Shieldbearer, Knight, Spearman
 import random
 
 class Cell:
-	def __init__(self, faction, unit=None, capital=False):
+	def __init__(self, faction=Faction(0), unit=None, capital=False):
 		self.faction = faction
 		self.unit = unit
 		self.capital = capital
@@ -47,7 +47,11 @@ class Cell:
 	def __repr__(self):
 		return str(self)
 
+	def hasUnit(self):
+		return self.unit is not None
 
+	def isCapital(self):
+		return self.capital
 
 
 if __name__ == '__main__':

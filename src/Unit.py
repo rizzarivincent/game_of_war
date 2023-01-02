@@ -25,22 +25,42 @@ ________________
 class Unit:
 	def __init__(self, char):
 		self.char = char
+		self.score = {
+			Shieldbearer: 0,
+			Knight: 0,
+			Spearman: 0
+		}
 
 	def __str__(self):
 		return self.char
+
+	def combat(self,opponent):
+		if opponent in self.score:
+			return self.score[opponent]
+		return 0
 
 
 class Shieldbearer(Unit):
 	def __init__(self):
 		super().__init__("U")
+		self.score[Shieldbearer] = 1
+		self.score[Knight] = 2
+		self.score[Spearman] = 0.5
 
 class Knight(Unit):
 	def __init__(self):
 		super().__init__("@")
+		self.score[Shieldbearer] = 0.5
+		self.score[Knight] = 1
+		self.score[Spearman] = 2
 
 class Spearman(Unit):
 	def __init__(self):
 		super().__init__("/")
+		self.score[Shieldbearer] = 2
+		self.score[Knight] = 0.5
+		self.score[Spearman] = 1
+
 
 
 if __name__ == '__main__':
