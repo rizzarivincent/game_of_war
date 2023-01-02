@@ -16,8 +16,8 @@
 ________________
 |_File_History_|________________________________________________________________
 |_Programmer______|_Date_______|_Comments_______________________________________
-| Max Marshall    | 2023-01-02 | Created File
-|
+| Max Marshall    | 2023-01-02 | Created File, 3 Base Units
+| Max Marshall    | 2023-01-02 | Added Capital
 |
 |
 """
@@ -34,7 +34,7 @@ class Unit:
 	def __str__(self):
 		return self.char
 
-	def combat(self,opponent):
+	def fight(self,opponent):
 		if opponent in self.score:
 			return self.score[opponent]
 		return 0
@@ -46,6 +46,7 @@ class Shieldbearer(Unit):
 		self.score[Shieldbearer] = 1
 		self.score[Knight] = 2
 		self.score[Spearman] = 0.5
+		self.score[Capital] = 1
 
 class Knight(Unit):
 	def __init__(self):
@@ -53,6 +54,7 @@ class Knight(Unit):
 		self.score[Shieldbearer] = 0.5
 		self.score[Knight] = 1
 		self.score[Spearman] = 2
+		self.score[Capital] = 1
 
 class Spearman(Unit):
 	def __init__(self):
@@ -60,6 +62,14 @@ class Spearman(Unit):
 		self.score[Shieldbearer] = 2
 		self.score[Knight] = 0.5
 		self.score[Spearman] = 1
+		self.score[Capital] = 1
+
+class Capital(Unit):
+	def __init__(self):
+		super().__init__("P")
+		self.score[Shieldbearer] = 0.334
+		self.score[Knight] = 0.334
+		self.score[Spearman] = 0.334
 
 
 
