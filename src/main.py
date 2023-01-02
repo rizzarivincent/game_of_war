@@ -1,5 +1,6 @@
 from Cell import Cell
 from Faction import Faction
+import random
 
 def main():
   # Reading in user input
@@ -20,23 +21,34 @@ def main():
     print("Too many factions")
     return
   # Read initialization type
-  print("Please enter your initialization type (random / custom / seed / empty)")
+  print("Please enter your initialization type (random / blobs / custom / seed / empty) (Default: random)")
   initType = str(input())
 
   # Initializing board, other variables
-  board = initializeBoard(rows, cols, numFactions, initType)
-  factions = [Faction(x + 1) for x in range(numFactions)]
+  factions = [Faction(x) for x in range(numFactions + 1)]
+  board = initializeBoard(rows, cols, factions, initType)
+
+  print(rows)
+  print(cols)
+  print(numFactions)
+  print(initType)
+
+  printBoard(board=board)
 
   # Main loop
-  # while (True):
-  #   board = tick(board, rows, cols, numFactions)
+  while (True):
+    printBoard(board)
+    board = tick(board, rows, cols, factions)
   
-def tick(board, rows, cols, numFactions):
-  newBoard = initializeEmpty(rows, cols)
-  for i in range(rows):
-    for j in range(cols):
-      newBoard[i][j] = nextState(board, i, j)
+def tick(board, rows, cols, factions):
+  newBoard = [[nextState(board, i, j) for j in range(cols)] for i in range(rows)]
   return newBoard
+
+def printBoard(board):
+  for i in range(len(board)):
+    for j in range(len(board[0])):
+      print(board[i][j], end="")
+    print()
 
 def nextState(board, i, j):
   info = getInfo(board, i, j)
@@ -45,23 +57,37 @@ def nextState(board, i, j):
 def getInfo(board, i, j):
   return 0
 
-def initializeBoard(rows, cols, numFactions, type):
-  if type == 'random':
-    return initializeRandom(rows, cols, numFactions)
+def initializeBoard(rows, cols, factions, type):
+  if type == 'random' or type == '':
+    return initializeRandom(rows, cols, factions)
+  elif type == 'blobs':
+    return initializeBlobs(rows, cols, factions)
   elif type == 'custom':
-    return
+    return initializeCustom(rows, cols, factions)
   elif type == 'seed':
-    return
+    return initializeSeed(rows, cols, factions)
   elif type == 'empty':
-    return initializeEmpty(rows, cols)
+    return initializeEmpty(rows, cols, factions)
   else:
-    return initializeEmpty(rows, cols)
+    return initializeEmpty(rows, cols, factions)
 
-def initializeEmpty(rows, cols):
-  return [[Cell(Faction(0)) for _ in range(rows)] for _ in range(cols)]
+def initializeEmpty(rows, cols, factions):
+  return [[Cell(factions[0]) for _ in range(cols)] for _ in range(rows)]
 
-def initializeRandom(rows, cols, numFactions):
-  return [[]]
+def initializeRandom(rows, cols, factions):
+  return [[Cell(random.choice(factions)) for _ in range(cols)] for _ in range(rows)]
+
+def initializeBlobs(rows, cols, factions):
+  # TODO: Implement this
+  return initializeEmpty(rows, cols, factions)
+
+def initializeCustom(rows, cols, factions):
+  # TODO: Implement this
+  return initializeEmpty(rows, cols, factions)
+
+def initializeSeed(rows, cols, factions):
+  # TODO: Implement this
+  return initializeEmpty(rows, cols, factions)
 
 def retrieveIntInput(default):
   userInput = input()
