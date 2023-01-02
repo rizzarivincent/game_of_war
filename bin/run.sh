@@ -27,5 +27,3 @@ source .venv/bin/activate
 FILE_LOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
 
 python3 $FILE_LOC/../src/main.py
-
-deactivate
