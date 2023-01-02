@@ -16,7 +16,7 @@
 ________________
 |_File_History_|________________________________________________________________
 |_Programmer______|_Date_______|_Comments_______________________________________
-| Max Marshall    | 2023-01-02 | Created File
+| Max Marshall    | 2023-01-02 | Created File, finished basic combat system
 |
 |
 |
@@ -65,7 +65,7 @@ def get_adj(location, faction, grids, combat_grid):
 
 def in_combat(proposed_maps,bounds):
 	x_bounds, y_bounds = bounds
-	combat_grid = [[False for _ in range(len(x_bounds))] for _ in range(len(y_bounds))]
+	combat_grid = [[False for _ in range(x_bounds[0],x_bounds[1])] for _ in range(y_bounds[0],y_bounds[1])]
 	for x in range(x_bounds[0],x_bounds[1]):
 		for y in range(y_bounds[0],y_bounds[1]):
 			count = 0
@@ -78,4 +78,46 @@ def in_combat(proposed_maps,bounds):
 
 
 if __name__ == '__main__':
-	pass
+	from Unit import Shieldbearer,Knight,Spearman
+	from Cell import Cell
+	from Faction import Faction
+
+	factions = [Faction(1),Faction(2)]
+	x = 4
+	y = 4
+	grid = [
+		[Cell(),Cell(),Cell(),Cell()],
+		[Cell(),Cell(),Cell(),Cell()],
+		[Cell(),Cell(),Cell(),Cell()],
+		[Cell(),Cell(),Cell(),Cell()]
+	]
+	state_1 = [
+		[Cell(),Cell(),Cell(),Cell()],
+		[Cell(),Cell(),Cell(factions[0],Knight()),Cell()],
+		[Cell(factions[0],Shieldbearer()),Cell(factions[0],Shieldbearer()),Cell(),Cell()],
+		[Cell(),Cell(factions[0],Shieldbearer()),Cell(),Cell()]
+	]
+	state_2 = [
+		[Cell(),Cell(),Cell(),Cell()],
+		[Cell(),Cell(),Cell(factions[1],Spearman()),Cell()],
+		[Cell(),Cell(factions[1],Spearman()),Cell(factions[1],Spearman()),Cell()],
+		[Cell(),Cell(),Cell(),Cell()]
+	]
+	combat_map = in_combat([state_1,state_2],[[0,x],[0,y]])
+	print(combat_map)
+	print("\033[0m",end="")
+	print("#"*(x+2))
+	for j in range(y):
+		for i in range(x):
+			if combat_map[j][i] == True:
+				grid[j][i] = combat([i,j],[state_1,state_2],combat_map)
+			else:
+				for state in [state_1,state_2]:
+					if state[j][i].faction.color != 0:
+						grid[j][i] = state[j][i]
+	for row in grid:
+		print("#",end="")
+		for column in row:
+			print(column,end="")
+		print("#")
+	print("#"*(x+2))

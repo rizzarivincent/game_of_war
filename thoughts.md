@@ -3,6 +3,7 @@
 - Adding units
   - Base on land owned
   - Players vote on what to add
+    - Everyone gets a percentage of the total number of new units of the voted type
   - Base on speed of decision making?
     - Incentivize fast algos
 - Combat
