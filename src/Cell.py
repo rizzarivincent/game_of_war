@@ -17,26 +17,31 @@ ________________
 |_File_History_|________________________________________________________________
 |_Programmer______|_Date_______|_Comments_______________________________________
 | Max Marshall    | 2023-01-01 | Created File
-|
+| Max Marshall    | 2023-01-02 | Modified class, added documentation,
+|                 |            | added test/example in guard
 |
 |
 """
-from Faction import Faction
-from Unit import Unit, Shieldbearer, Knight, Spearman
+from Faction import Faction, Factionless, Terrain
+from Unit import Shieldbearer, Knight, Spearman, Capital
 import random
 
+
 class Cell:
-	def __init__(self, faction=Faction(0), unit=None, capital=False):
+	def __init__(self, faction=Factionless(), unit=None):
+		"""
+		Creates a Cell, holds Faction and Unit Data
+
+		Inputs:
+			- faction -> Faction (deafult Factionless)
+			- unit -> Unit (default None)
+		"""
 		self.faction = faction
 		self.unit = unit
-		self.capital = capital
 
 	def __str__(self):
-		string = "\033[0m\033"
-		if self.capital:
-			string += "[{}m".format(self.faction.color+100)
-		else:
-			string += "[{}m".format(self.faction.color+40)
+		string = "\033[0m"
+		string += "\033[{}m".format(self.faction.color+40+(self.faction.bold*60))
 		if self.unit is not None:
 			string += "\033[1;{0}m{1}".format(37,self.unit)
 		else:
@@ -50,19 +55,18 @@ class Cell:
 	def hasUnit(self):
 		return self.unit is not None
 
-	def isCapital(self):
-		return self.capital
-
 
 if __name__ == '__main__':
 	x = 80
 	y = 22
-	factions = [Faction(1),Faction(2),Faction(0),Faction(3),Faction(4),Faction(5),Faction(6)]
+	factions = [Faction(x) for x in range(1,13)]
+	factions.append(Factionless())
+	factions.append(Terrain())
 	grid = [[Cell(random.choice(factions)) for _ in range(x)] for _ in range(y)]
 	for _ in range(20):
 		row = random.choice(grid)
 		cell = random.choice(row)
-		cell.unit = random.choice([Shieldbearer,Knight,Spearman])()
+		cell.unit = random.choice([Shieldbearer,Knight,Spearman,Capital])()
 	for row in grid:
 		for column in row:
 			print(column,end="")
