@@ -28,13 +28,6 @@ def main():
   factions = [Faction(x) for x in range(numFactions + 1)]
   board = initializeBoard(rows, cols, factions, initType)
 
-  print(rows)
-  print(cols)
-  print(numFactions)
-  print(initType)
-
-  printBoard(board=board)
-
   # Main loop
   while (True):
     printBoard(board)
