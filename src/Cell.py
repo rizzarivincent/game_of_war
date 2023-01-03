@@ -23,7 +23,7 @@ ________________
 |
 """
 from Faction import Faction, Factionless, Terrain
-from Unit import Shieldbearer, Knight, Spearman, Capital
+from Unit import Shieldbearer, Knight, Spearman, Capital, City
 import random
 
 
@@ -66,7 +66,7 @@ if __name__ == '__main__':
 	for _ in range(20):
 		row = random.choice(grid)
 		cell = random.choice(row)
-		cell.unit = random.choice([Shieldbearer,Knight,Spearman,Capital])()
+		cell.unit = random.choice([Shieldbearer,Knight,Spearman,Capital,City])()
 	for row in grid:
 		for column in row:
 			print(column,end="")

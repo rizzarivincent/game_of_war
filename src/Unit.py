@@ -17,7 +17,7 @@ ________________
 |_File_History_|________________________________________________________________
 |_Programmer______|_Date_______|_Comments_______________________________________
 | Max Marshall    | 2023-01-02 | Created File, 3 Base Units
-| Max Marshall    | 2023-01-02 | Added Capital
+| Max Marshall    | 2023-01-02 | Added Capital, City
 |
 |
 """
@@ -28,6 +28,8 @@ class Unit:
 		self.score = {
 			Shieldbearer: 0,
 			Knight: 0,
+			Spearman: 0,
+			Capital: 0,
 			Spearman: 0
 		}
 
@@ -47,6 +49,7 @@ class Shieldbearer(Unit):
 		self.score[Knight] = 2
 		self.score[Spearman] = 0.5
 		self.score[Capital] = 1
+		self.score[City] = 1
 
 class Knight(Unit):
 	def __init__(self):
@@ -55,6 +58,7 @@ class Knight(Unit):
 		self.score[Knight] = 1
 		self.score[Spearman] = 2
 		self.score[Capital] = 1
+		self.score[City] = 1
 
 class Spearman(Unit):
 	def __init__(self):
@@ -63,6 +67,7 @@ class Spearman(Unit):
 		self.score[Knight] = 0.5
 		self.score[Spearman] = 1
 		self.score[Capital] = 1
+		self.score[City] = 1
 
 class Capital(Unit):
 	def __init__(self):
@@ -70,6 +75,17 @@ class Capital(Unit):
 		self.score[Shieldbearer] = 0.334
 		self.score[Knight] = 0.334
 		self.score[Spearman] = 0.334
+		self.score[Capital] = 0.334
+		self.score[City] = 0.334
+
+class City(Unit):
+	def __init__(self):
+		super().__init__("h")
+		self.score[Shieldbearer] = 0.75
+		self.score[Knight] = 0.75
+		self.score[Spearman] = 0.75
+		self.score[Capital] = 0.75
+		self.score[City] = 0.75
 
 
 
