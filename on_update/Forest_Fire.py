@@ -17,20 +17,26 @@ ________________
 |_File_History_|________________________________________________________________
 |_Programmer______|_Date_______|_Comments_______________________________________
 | Max Marshall    | 2023-01-05 | Created File
-|
+| Max Marshall    | 2023-01-06 | Converted to class
 |
 |
 """
 
-def update(grid,turn):
-	"""
-	I haven't gotten the code out yet...
-	I realized that I have to wait for the rest of the game to be working...
-	But, what it will eventually do:
-	Starts a fire in one of the impassable cells, which has a chance of spreading
-	to other cells, converting them to the most popular faction around them, aside from impassable (default Factionless).
-	"""
-	return grid
+class Forest_Fire:
+	def __init__(self, players, grid, units):
+		self.players = players
+		self.grid = grid
+		self.units = units
+
+	def update(self, grid, turn):
+		"""
+		I haven't gotten the code out yet...
+		I realized that I have to wait for the rest of the game to be working...
+		But, what it will eventually do:
+		Starts a fire in one of the impassable cells, which has a chance of spreading
+		to other cells, converting them to the most popular faction around them, aside from impassable (default Factionless).
+		"""
+		return grid
 
 if __name__ == '__main__':
 	pass

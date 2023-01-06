@@ -22,12 +22,18 @@ ________________
 |
 """
 
-def update(grid,turn):
-	"""
-	This should be pretty self-explanatory. If this file is specified as an event
-	at game start, this function will be called once a turn. The modifed grid will be accepted and used by the game.
-	"""
-	return grid
+class Template:
+	def __init__(self, players, grid, units):
+		self.players = players
+		self.grid = grid
+		self.units = units
+
+	def update(self, grid, turn):
+		"""
+		This should be pretty self-explanatory. If this file is specified as an event
+		at game start, this function will be called once a turn. The modifed grid will be accepted and used by the game.
+		"""
+		return grid
 
 
 if __name__ == '__main__':
