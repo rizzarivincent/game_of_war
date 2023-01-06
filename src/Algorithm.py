@@ -38,21 +38,22 @@ class Algorithm:
 			NOTE: filename must match class name in file
 		"""
 		self.faction = faction
-		self.debug = True
+		self.debug = False
 		self.load_algo(filename)
 
 	def load_algo(self, filename):
 		"""
 		Loads designated algo from algorithms file
 		"""
-		module = __import__(filename)
+		module = __import__("algorithms.{}".format(filename))
+		module = getattr(module,filename)
 		self.algo = getattr(module,filename)(self.faction)
 
 	def push_grid(self,grid):
 		"""
 		Pushes current grid to algo.
 		"""
-		self.algo.grid = [[grid[y][x] for x in range(len(grid[0]))] for y in range(len(grid))]
+		self.algo.grid = [[grid[y][x].copy() for x in range(len(grid[0]))] for y in range(len(grid))]
 		if self.debug:
 			self.faction.print("PUSHED_GRID:")
 			for y in range(len(self.algo.grid)):
@@ -69,13 +70,13 @@ class Algorithm:
 		stop_time = time.time_ns()
 		return move, (stop_time-start_time)
 
-	def print_failure(self,string):
+	def report_failure(self,string):
 		"""
 		Passes on failure reason to algo
 		"""
 		try:
 			self.algo.print_failure(string)
-		except NameError:
+		except AttributeError:
 			pass
 
 

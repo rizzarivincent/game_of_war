@@ -25,6 +25,7 @@ import random
 from Cell import Cell
 from Faction import Faction
 from Algorithm import Algorithm
+from Unit import Knight, Shieldbearer, Spearman, Capital, City
 import utils
 import state
 
@@ -75,6 +76,9 @@ def main():
       conditions.append(utils.load_condition(cond))
       print("{} LOADED".format(cond))
 
+  if len(conditions) == 0:
+    conditions = [utils.load_condition("Endless")]
+
   # Adding players
   controllers = []
   i=1
@@ -109,15 +113,21 @@ def main():
     # Get updated boards
     new_boards = []
     for controller in controllers:
+      units = [Knight(), Spearman()]
       validated = False
       time = 0
       while not validated:
-        new_board, new_time = controller.get_move([])
+        new_board, new_time = controller.get_move(units)
         time += new_time
-        validated, valid_board, reason = state.validate(new_board, controller.faction, board)
+        validated, valid_board, reason = state.validate(new_board, controller.faction, board, units)
         if not validated:
+          print("FAILED")
+          print(reason)
+          input()
           controller.report_failure(reason)
+          controller.push_grid(board)
       new_boards.append(valid_board)
+      print("Board Added")
     # Recombine new boards
     board = state.combine_boards(new_boards,board)
     won, winner = state.check_win(board,conditions)

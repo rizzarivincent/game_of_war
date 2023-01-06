@@ -1,5 +1,5 @@
 """
-	Copyright (C) 2023  Vincent Rizzari and Max Marshall   
+	Copyright (C) 2023  Max Marshall   
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -16,26 +16,15 @@
 ________________
 |_File_History_|________________________________________________________________
 |_Programmer______|_Date_______|_Comments_______________________________________
-| Max Marshall    | 2023-01-05 | Created File
+| Max Marshall    | 2023-01-06 | Created File
 |
 |
 |
 """
 
-class Factionless:
-	def __init__(self, Faction):
-		self.faction = Faction
-		self.grid = [[]]
-
-	def get_move(self, new_units):
-		"""
-		The quickest, least effective strategy: Doing Absolutely Nothing
-		"""
-		return self.grid
-
-	def report_failure(self, string):
-		print(string)
+def check_win(board):
+	return False, None
 
 
 if __name__ == '__main__':
-	test = Factionless()
+	pass

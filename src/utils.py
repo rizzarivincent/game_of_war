@@ -28,6 +28,14 @@ sys.path.append(path.join("..","on_update"))
 sys.path.append("..")
 
 
+def yesno(string):
+	no = ["n","no"]
+	value = input(string)
+	if value.lower() in no:
+		return False
+	return True
+
+
 def find_algo(name):
 	algo_loc = path.join("..","algorithms")
 	return path.exists(path.join(algo_loc,"{}.py".format(name)))
