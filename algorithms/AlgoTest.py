@@ -12,6 +12,5 @@ class AlgoTest:
 			x += 1
 		print(x)
 		print("RETURN GRID")
-		return [[]]
+		return self.grid
 
-	

@@ -17,7 +17,7 @@ ________________
 |_File_History_|________________________________________________________________
 |_Programmer______|_Date_______|_Comments_______________________________________
 | Max Marshall    | 2023-01-05 | Created File
-|
+| Max Marshall    | 2023-01-06 | Fixed logic in validate/get_cells()
 |
 |
 """
@@ -89,10 +89,10 @@ def combine_boards(board_list, prev_board):
 			if battle_map[j][i]:
 				board[j][i] = combat([i,j],board_list,battle_map)
 			else:
-				board[j][i] = prev_board[j][i].copy()
-				cells = get_cells(board_list,i,j).copy()
-				if len(cells) > 1:
-					print(cells)
+				unit_cells, cells = get_cells(board_list,i,j)
+				if len(unit_cells) != 0:
+					board[j][i] = unit_cells[0].copy()
+					continue
 				assert len(cells)<=1, "Cell claimed by multiple combatants without combat"
 				if len(cells) > 0:
 					board[j][i] = cells[0].copy()
@@ -110,11 +110,14 @@ def get_cells(boards, i, j):
 	Outputs:
 		- list of Cell objects
 	"""
+	unit_cells = []
 	cells = []
 	for board in boards:
 		if board[j][i] is not None:
+			if board[j][i].hasUnit():
+				unit_cells.append(board[j][i])
 			cells.append(board[j][i])
-	return cells
+	return unit_cells, cells
 
 def find_unit(unit, grid, i, j, new_units):
 	"""
