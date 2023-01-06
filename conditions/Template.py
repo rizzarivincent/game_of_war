@@ -17,13 +17,19 @@ ________________
 |_File_History_|________________________________________________________________
 |_Programmer______|_Date_______|_Comments_______________________________________
 | Max Marshall    | 2023-01-05 | Created File
-|
+| Max Marshall    | 2023-01-06 | Converted to class
 |
 |
 """
 
-def check_win(board):
-	return True, board[0][0].faction
+class Template:
+	def __init__(self, players, grid, units):
+		self.players = players
+		self.grid = grid
+		self.units = units
+
+	def check_win(self, board):
+		return True, board[0][0].faction
 
 
 if __name__ == '__main__':

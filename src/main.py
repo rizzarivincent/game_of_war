@@ -101,6 +101,11 @@ def main():
 
   turn = 0
 
+  for i in range(len(conditions)):
+    conditions[i] = conditions[i](controllers,board,[Knight,Shieldbearer,Spearman, City, Capital])
+  for j in range(len(events)):
+    events[j] = events[j](controllers,board,[Knight,Shieldbearer,Spearman, City, Capital])
+
   # Main loop
   while (True):
     # Event update

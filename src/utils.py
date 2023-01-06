@@ -55,7 +55,8 @@ def check_condition(name):
 def load_condition(name):
 	module = __import__("conditions.{}".format(name))
 	script = getattr(module,name)
-	return script
+	component = getattr(script,name)
+	return component
 
 
 def check_event(name):
@@ -65,7 +66,8 @@ def check_event(name):
 def load_event(name):
 	module = __import__("on_update.{}".format(name))
 	script = getattr(module,name)
-	return script
+	component = getattr(script,name)
+	return component
 
 
 
