@@ -18,9 +18,10 @@ ________________
 |_Programmer______|_Date_______|_Comments_______________________________________
 | Max Marshall    | 2023-01-01 | Created File
 | Max Marshall    | 2023-01-02 | Added name, __str__() rep, Factionless, Terrain
-|
+| Max Marshall    | 2023-01-05 | Added hash, print in color function, __eq__()
 |
 """
+import random
 
 class Faction:
 	def __init__(self,color,name="team"):
@@ -52,6 +53,7 @@ class Faction:
 		self.bold = int(color/(6+1))
 		self.color += self.bold
 		self.name = name
+		self.hash = random.getrandbits(16)+2
 
 	def __str__(self):
 		return "\033[{0};{1}m{2}\033[0m".format(self.bold,self.color+30,self.name)
@@ -59,12 +61,19 @@ class Faction:
 	def __repr__(self):
 		return str(self)
 
+	def __eq__(self, other):
+		return self.hash == other.hash
+
+	def print(self, string):
+		print("\033[{0};{1}m{2}\033[0m".format(self.bold,self.color+30,string))
+
 
 class Factionless(Faction):
 	def __init__(self):
 		self.color = 0
 		self.bold = 0
 		self.name = "Factionless"
+		self.hash = 1
 
 
 class Terrain(Faction):
@@ -72,6 +81,7 @@ class Terrain(Faction):
 		self.color = 7
 		self.bold = 1
 		self.name = "Terrain"
+		self.hash = 0
 
 
 if __name__ == '__main__':

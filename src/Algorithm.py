@@ -54,6 +54,7 @@ class Algorithm:
 		"""
 		self.algo.grid = [[grid[y][x] for x in range(len(grid[0]))] for y in range(len(grid))]
 		if self.debug:
+			self.faction.print("PUSHED_GRID:")
 			for y in range(len(self.algo.grid)):
 				for x in range(len(self.algo.grid[0])):
 					print(self.algo.grid[y][x],end="")

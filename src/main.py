@@ -33,8 +33,8 @@ def main():
   # Reading in user input
   print("Welcome to the Game of War!")
   # Read number of rows
-  print("Please enter the height of your game board (Default: 30):")
-  rows = retrieveIntInput(30)
+  print("Please enter the height of your game board (Default: 20):")
+  rows = retrieveIntInput(20)
   # Read number of columns
   print("Please enter the width of your game board (Default: 40):")
   cols = retrieveIntInput(40)
@@ -58,10 +58,22 @@ def main():
   # Add in special events
   # TODO: Add support for events
   events = []
+  updates = input("Enter Events, separated by commas: ")
+  for update in updates.split(","):
+    update = update.strip()
+    if utils.check_event(update):
+      events.append(utils.load_event(update))
+      print("{} LOADED".format(update))
 
   # Add in win conditions
   # TODO: Add support for win conditions
   conditions = []
+  conds = input("Enter Conditions, separated by commas: ")
+  for cond in conds.split(","):
+    cond = cond.strip()
+    if utils.check_condition(cond):
+      conditions.append(utils.load_condition(cond))
+      print("{} LOADED".format(cond))
 
   # Adding players
   controllers = []
@@ -83,13 +95,13 @@ def main():
   print(numFactions)
   print(initType)
 
-  printBoard(board)
+  turn = 0
 
   # Main loop
   while (True):
     # Event update
     for event in events:
-      board = event.update(board)
+      board = event.update(board, turn)
     printBoard(board)
     # Send board to players
     for controller in controllers:
@@ -100,15 +112,16 @@ def main():
       validated = False
       time = 0
       while not validated:
-        new_board, new_time = controller.get_move()
+        new_board, new_time = controller.get_move([])
         time += new_time
         validated, valid_board, reason = state.validate(new_board, controller.faction, board)
         if not validated:
           controller.report_failure(reason)
       new_boards.append(valid_board)
     # Recombine new boards
-    board = state.combine_boards(new_boards)
+    board = state.combine_boards(new_boards,board)
     won, winner = state.check_win(board,conditions)
+    turn += 1
     if won:
       break
   utils.print_victory(len(board[0]), len(board), winner)

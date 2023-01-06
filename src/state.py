@@ -21,6 +21,7 @@ ________________
 |
 |
 """
+from combat import combat, in_combat
 
 def validate(new_grid, faction, old_grid, new_units=[]):
 	"""
@@ -43,7 +44,7 @@ def validate(new_grid, faction, old_grid, new_units=[]):
 		for i in range(len(new_grid[0])):
 			cell = new_grid[j][i]
 			if cell.faction is not faction:
-				cell = None
+				new_grid[j][i] = None
 			else:
 				if old_grid[j][i].faction is not faction:
 					if cell.unit is None:
@@ -69,10 +70,52 @@ def validate(new_grid, faction, old_grid, new_units=[]):
 	return True, new_grid, "Success"
 
 
-def combine_boards(board_list):
-	# TODO: Write function
-	return
+def combine_boards(board_list, prev_board):
+	"""
+	Combines together the assorted player moves into a new board
 
+	Inputs:
+		- board_list -> List of new boards
+		- prev_board -> previous (current accepted) board
+
+	Outputs:
+		- new_board -> 2d list of cells
+	"""
+	board = [[None for _ in prev_board[0]] for _ in prev_board]
+	battle_map = in_combat(board_list,\
+		[[0,len(prev_board[0])],[0,len(prev_board)]])
+
+	for j in range(len(prev_board)):
+		for i in range(len(prev_board[0])):
+			if battle_map[j][i]:
+				board[j][i] = combat([i,j],board_list,battle_map)
+			else:
+				board[j][i] = prev_board[j][i]
+				cells = get_cells(board_list,i,j)
+				if len(cells) > 1:
+					print(cells)
+				assert len(cells)<=1, "Cell claimed by multiple combatants without combat"
+				if len(cells) > 0:
+					board[j][i] = cells[0]
+	return board
+
+
+def get_cells(boards, i, j):
+	"""
+	Gets all cells at indices in boards
+
+	Inputs:
+		- boards -> list of 2d arrays of Cells
+		- i, j -> indices to desired cell
+	
+	Outputs:
+		- list of Cell objects
+	"""
+	cells = []
+	for board in boards:
+		if board[j][i] is not None:
+			cells.append(board[j][i])
+	return cells
 
 def find_unit(unit, grid, i, j, new_units):
 	"""
@@ -109,7 +152,7 @@ def check_win(board, conditions):
 	"""
 	winning_faction = None
 	for condition in conditions:
-		win, faction = condition(board)
+		win, faction = condition.check_win(board)
 		if not win:
 			return False, None
 		if winning_faction is not None and faction is not winning_faction:

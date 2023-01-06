@@ -27,7 +27,7 @@ class Factionless:
 		self.faction = Faction
 		self.grid = [[]]
 
-	def get_move(self):
+	def get_move(self, new_units):
 		"""
 		The quickest, least effective strategy: Doing Nothing
 		"""

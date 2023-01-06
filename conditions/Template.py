@@ -22,22 +22,9 @@ ________________
 |
 """
 
-class Template:
-	def __init__(self,Faction):
-		"""
-		This should not need to be modified.
-		"""
-		self.faction = Faction
-		self.grid = [[]]
-
-	def get_move(self, new_units):
-		"""
-		Modify this function and make any additional functions/variables/imports/etc
-		as required.
-		"""
-		return self.grid
+def check_win(board):
+	return True, board[0][0].faction
 
 
 if __name__ == '__main__':
-	# Algo Testing
-	test = Template()
+	pass
