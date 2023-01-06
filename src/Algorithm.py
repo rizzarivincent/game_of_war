@@ -17,7 +17,7 @@ ________________
 |_File_History_|________________________________________________________________
 |_Programmer______|_Date_______|_Comments_______________________________________
 | Max Marshall    | 2023-01-02 | Created File, added module loading
-|
+| Max Marshall    | 2023-01-05 | Added get_move(), central to use
 |
 |
 """
@@ -46,7 +46,7 @@ class Algorithm:
 		Loads designated algo from algorithms file
 		"""
 		module = __import__(filename)
-		self.algo = getattr(module,filename)()
+		self.algo = getattr(module,filename)(self.faction)
 
 	def push_grid(self,grid):
 		"""
@@ -59,14 +59,23 @@ class Algorithm:
 					print(self.algo.grid[y][x],end="")
 				print()
 
-	def get_move(self):
+	def get_move(self,units=[]):
 		"""
 		Gets moves from the Algorithm
 		"""
 		start_time = time.time_ns()
-		move = self.algo.get_move()
+		move = self.algo.get_move(units)
 		stop_time = time.time_ns()
 		return move, (stop_time-start_time)
+
+	def print_failure(self,string):
+		"""
+		Passes on failure reason to algo
+		"""
+		try:
+			self.algo.print_failure(string)
+		except NameError:
+			pass
 
 
 if __name__ == '__main__':
@@ -78,7 +87,7 @@ if __name__ == '__main__':
 	faction = Faction(1)
 	factions = [faction,Faction(2),Faction(3)]
 	grid = [[Cell(random.choice(factions)) for _ in range(x)] for _ in range(y)]
-	test = Algorithm(faction,"AlgoTest")
+	test = Algorithm(faction,"Factionless")
 	test.push_grid(grid)
 	_, time = test.get_move()
 	print(time)

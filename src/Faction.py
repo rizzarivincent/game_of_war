@@ -28,22 +28,26 @@ class Faction:
 		Creates a new Faction
 
 		Inputs:
-			- color -> int in [0,7]
+			- color -> int in [1,12]
 			- name -> string
 
 		Color Table:
-			0 -> Black
 			1 -> Red
 			2 -> Green
 			3 -> Yellow
 			4 -> Blue
 			5 -> Magenta
 			6 -> Cyan
-			7 -> White
+			1 -> Bold Red
+			2 -> Bold Green
+			3 -> Bold Yellow
+			4 -> Bold Blue
+			5 -> Bold Magenta
+			6 -> Bold Cyan
 
-			Black is reserved for factionless, and white is impassable terrain,
-			leaving 6 remaining available for factions
+			Black is reserved for factionless, and white is impassable terrain
 		"""
+		assert 12>=color>0, "color must be in [1,12]"
 		self.color = color%7
 		self.bold = int(color/(6+1))
 		self.color += self.bold

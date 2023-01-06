@@ -18,20 +18,17 @@ ________________
 |_Programmer______|_Date_______|_Comments_______________________________________
 | Max Marshall    | 2023-01-02 | Created File, 3 Base Units
 | Max Marshall    | 2023-01-02 | Added Capital, City
-|
+| Max Marshall    | 2023-01-05 | Added movement and hash values for validation
 |
 """
+import random
 
 class Unit:
 	def __init__(self, char):
 		self.char = char
-		self.score = {
-			Shieldbearer: 0,
-			Knight: 0,
-			Spearman: 0,
-			Capital: 0,
-			Spearman: 0
-		}
+		self.score = {}
+		self.movement = 1
+		self.hash = random.getrandbits(16)
 
 	def __str__(self):
 		return self.char
@@ -39,7 +36,10 @@ class Unit:
 	def fight(self,opponent):
 		if opponent in self.score:
 			return self.score[opponent]
-		return 0
+		return 1
+
+	def __eq__(self, object):
+		return self.hash == object.hash
 
 
 class Shieldbearer(Unit):
@@ -72,6 +72,7 @@ class Spearman(Unit):
 class Capital(Unit):
 	def __init__(self):
 		super().__init__("P")
+		self.movement = 0
 		self.score[Shieldbearer] = 0.334
 		self.score[Knight] = 0.334
 		self.score[Spearman] = 0.334
@@ -81,6 +82,7 @@ class Capital(Unit):
 class City(Unit):
 	def __init__(self):
 		super().__init__("h")
+		self.movement = 0
 		self.score[Shieldbearer] = 0.75
 		self.score[Knight] = 0.75
 		self.score[Spearman] = 0.75

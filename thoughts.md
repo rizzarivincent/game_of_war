@@ -14,4 +14,3 @@
 - Main game serves only to verify game states and deal with the end results
   - Allow players to submit their own subclasses of some player class to play the game for them
     - Allows for many different play algos -> AI/ML, stats based, programmer's own strats, etc.
-

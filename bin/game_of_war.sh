@@ -1,6 +1,6 @@
 #!/bin/bash
 ################################################################################
-# setup
+# game_of_war
 ################################################################################
 #	Copyright (C) 2023  Vincent Rizzari and Max Marshall   
 #	This program is free software: you can redistribute it and/or modify
