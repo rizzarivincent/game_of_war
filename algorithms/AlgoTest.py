@@ -1,4 +1,4 @@
-# Test Algorithm
+# Test Algorithm, time checks
 import random
 
 class AlgoTest:
@@ -12,5 +12,6 @@ class AlgoTest:
 			x += 1
 		print(x)
 		print("RETURN GRID")
+		return [[]]
 
 	

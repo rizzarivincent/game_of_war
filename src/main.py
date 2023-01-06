@@ -1,13 +1,40 @@
+"""
+	Copyright (C) 2023  Vincent Rizzari and Max Marshall   
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see https://www.gnu.org/licenses/.
+________________
+|_File_History_|________________________________________________________________
+|_Programmer______|_Date_______|_Comments_______________________________________
+| Vincent Rizzari | 2023-01-01 | Created File
+| Max Marshall    | 2023-01-05 | Remade game loop, added algo selection
+|
+|
+"""
+import random
 from Cell import Cell
 from Faction import Faction
-import random
+from Algorithm import Algorithm
+import utils
+import state
+
 
 def main():
   # Reading in user input
   print("Welcome to the Game of War!")
   # Read number of rows
-  print("Please enter the height of your game board (Default: 30):")
-  rows = retrieveIntInput(30)
+  print("Please enter the height of your game board (Default: 20):")
+  rows = retrieveIntInput(20)
   # Read number of columns
   print("Please enter the width of your game board (Default: 40):")
   cols = retrieveIntInput(40)
@@ -25,24 +52,80 @@ def main():
   initType = str(input())
 
   # Initializing board, other variables
-  factions = [Faction(x) for x in range(numFactions + 1)]
+  factions = [Faction(x+1) for x in range(numFactions)]
   board = initializeBoard(rows, cols, factions, initType)
+
+  # Add in special events
+  # TODO: Add support for events
+  events = []
+  updates = input("Enter Events, separated by commas: ")
+  for update in updates.split(","):
+    update = update.strip()
+    if utils.check_event(update):
+      events.append(utils.load_event(update))
+      print("{} LOADED".format(update))
+
+  # Add in win conditions
+  # TODO: Add support for win conditions
+  conditions = []
+  conds = input("Enter Conditions, separated by commas: ")
+  for cond in conds.split(","):
+    cond = cond.strip()
+    if utils.check_condition(cond):
+      conditions.append(utils.load_condition(cond))
+      print("{} LOADED".format(cond))
+
+  # Adding players
+  controllers = []
+  i=1
+  for faction in factions:
+    file = input("Enter Algorithm Name for Faction {} of {}: ".format(i,len(factions)))
+    exists = utils.find_algo(file)
+    while not exists:
+      print("Algorithm not found. If Human Player, enter \"Human\". Try again.")
+      file = input("Enter Algorithm Name for Faction {} of {}: ".format(i,len(factions)))
+      exists = utils.find_algo(file)
+    faction.name = input("Enter Faction Name: ")
+    controller = Algorithm(faction,file)
+    controllers.append(controller)
+    i+=1
 
   print(rows)
   print(cols)
   print(numFactions)
   print(initType)
 
-  printBoard(board=board)
+  turn = 0
 
   # Main loop
   while (True):
+    # Event update
+    for event in events:
+      board = event.update(board, turn)
     printBoard(board)
-    board = tick(board, rows, cols, factions)
-  
-def tick(board, rows, cols, factions):
-  newBoard = [[nextState(board, i, j) for j in range(cols)] for i in range(rows)]
-  return newBoard
+    # Send board to players
+    for controller in controllers:
+      controller.push_grid(board)
+    # Get updated boards
+    new_boards = []
+    for controller in controllers:
+      validated = False
+      time = 0
+      while not validated:
+        new_board, new_time = controller.get_move([])
+        time += new_time
+        validated, valid_board, reason = state.validate(new_board, controller.faction, board)
+        if not validated:
+          controller.report_failure(reason)
+      new_boards.append(valid_board)
+    # Recombine new boards
+    board = state.combine_boards(new_boards,board)
+    won, winner = state.check_win(board,conditions)
+    turn += 1
+    if won:
+      break
+  utils.print_victory(len(board[0]), len(board), winner)
+
 
 def printBoard(board):
   for i in range(len(board)):

@@ -18,7 +18,7 @@ ________________
 |_Programmer______|_Date_______|_Comments_______________________________________
 | Max Marshall    | 2023-01-02 | Created File, finished basic combat system
 | Max Marshall    | 2023-01-02 | Added documentation
-|
+| Max Marshall    | 2023-01-05 | Fixed for Cell = None
 |
 """
 
@@ -38,7 +38,8 @@ def combat(location,grids,combat_grid):
 	x, y = location
 	scores = {}
 	for grid in grids:
-		scores[grid[y][x]] = 0
+		if grid[x][y] is not None:
+			scores[grid[y][x]] = 0
 	for cell in scores:
 		adj_units = get_adj(location, cell.faction, grids, combat_grid)
 		for unit in adj_units:
@@ -79,9 +80,10 @@ def get_adj(location, faction, grids, combat_grid):
 						units.append(grid[j][i].unit)
 				else:
 					if combat_grid[j][i] is False:
-						if grid[j][i].hasUnit():
-							if grid[j][i].faction is not faction:
-								units.append(grid[j][i].unit)
+						if grid[j][i] is not None:
+							if grid[j][i].hasUnit():
+								if grid[j][i].faction is not faction:
+									units.append(grid[j][i].unit)
 	return units
 
 
@@ -102,6 +104,8 @@ def in_combat(proposed_maps,bounds):
 		for y in range(y_bounds[0],y_bounds[1]):
 			count = 0
 			for prop_map in proposed_maps:
+				if prop_map[y][x] is None:
+					continue
 				if prop_map[y][x].unit is not None:
 					count += 1
 			if count > 1:
