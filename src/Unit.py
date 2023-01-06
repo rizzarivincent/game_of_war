@@ -33,6 +33,9 @@ class Unit:
 	def __str__(self):
 		return self.char
 
+	def __repr__(self):
+		return self.char
+
 	def fight(self,opponent):
 		if opponent in self.score:
 			return self.score[opponent]
@@ -50,6 +53,7 @@ class Shieldbearer(Unit):
 		self.score[Spearman] = 0.5
 		self.score[Capital] = 1
 		self.score[City] = 1
+		self.name = "Shieldbearer"
 
 class Knight(Unit):
 	def __init__(self):
@@ -59,6 +63,7 @@ class Knight(Unit):
 		self.score[Spearman] = 2
 		self.score[Capital] = 1
 		self.score[City] = 1
+		self.name = "Knight"
 
 class Spearman(Unit):
 	def __init__(self):
@@ -68,6 +73,7 @@ class Spearman(Unit):
 		self.score[Spearman] = 1
 		self.score[Capital] = 1
 		self.score[City] = 1
+		self.name = "Spearman"
 
 class Capital(Unit):
 	def __init__(self):
@@ -78,6 +84,7 @@ class Capital(Unit):
 		self.score[Spearman] = 0.334
 		self.score[Capital] = 0.334
 		self.score[City] = 0.334
+		self.name = "Capital"
 
 class City(Unit):
 	def __init__(self):
@@ -88,7 +95,7 @@ class City(Unit):
 		self.score[Spearman] = 0.75
 		self.score[Capital] = 0.75
 		self.score[City] = 0.75
-
+		self.name = "Capital"
 
 
 if __name__ == '__main__':

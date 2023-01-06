@@ -40,7 +40,8 @@ class Cell:
 		self.unit = unit
 
 	def __str__(self):
-		string = "\033[0m"
+		#string = "\033[0m"
+		string = ""
 		string += "\033[{}m".format(self.faction.color+40+(self.faction.bold*60))
 		if self.unit is not None:
 			string += "\033[1;{0}m{1}".format(37,self.unit)
@@ -51,6 +52,9 @@ class Cell:
 
 	def __repr__(self):
 		return str(self)
+
+	def copy(self):
+		return Cell(self.faction, unit=self.unit)
 
 	def hasUnit(self):
 		return self.unit is not None

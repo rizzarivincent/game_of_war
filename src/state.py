@@ -17,7 +17,7 @@ ________________
 |_File_History_|________________________________________________________________
 |_Programmer______|_Date_______|_Comments_______________________________________
 | Max Marshall    | 2023-01-05 | Created File
-|
+| Max Marshall    | 2023-01-06 | Fixed logic in validate/get_cells()
 |
 |
 """
@@ -42,13 +42,13 @@ def validate(new_grid, faction, old_grid, new_units=[]):
 	old_total_units = 0
 	for j in range(len(new_grid)):
 		for i in range(len(new_grid[0])):
-			cell = new_grid[j][i]
+			cell = new_grid[j][i].copy()
 			if cell.faction is not faction:
 				new_grid[j][i] = None
 			else:
 				if old_grid[j][i].faction is not faction:
 					if cell.unit is None:
-						return False, new_grid, "Took land that did not beling to you:\
+						return False, new_grid, "Took land that did not belong to you:\
 							 ({},{})".format(i,j)
 					if cell.unit in new_units:
 						return False, new_grid, "Placed a unit in a cell which did not belong to you: ({},{})".format(i,j)
@@ -62,9 +62,8 @@ def validate(new_grid, faction, old_grid, new_units=[]):
 				old_total_units += 1
 
 	# Check totals
-	if total_units + len(new_units) > old_total_units:
-		return False, new_grid, "Added additional units:\n\
-			Previous: {} Units\nAdded: {} Units\nSubmitted: {}Units"\
+	if total_units > old_total_units + len(new_units):
+		return False, new_grid, "Added additional units:\nPrevious: {} Units\nAdded: {} Units\nSubmitted: {} Units"\
 				.format(old_total_units, len(new_units), total_units)
 
 	return True, new_grid, "Success"
@@ -90,13 +89,13 @@ def combine_boards(board_list, prev_board):
 			if battle_map[j][i]:
 				board[j][i] = combat([i,j],board_list,battle_map)
 			else:
-				board[j][i] = prev_board[j][i]
-				cells = get_cells(board_list,i,j)
-				if len(cells) > 1:
-					print(cells)
+				unit_cells, cells = get_cells(board_list,i,j)
+				if len(unit_cells) != 0:
+					board[j][i] = unit_cells[0].copy()
+					continue
 				assert len(cells)<=1, "Cell claimed by multiple combatants without combat"
 				if len(cells) > 0:
-					board[j][i] = cells[0]
+					board[j][i] = cells[0].copy()
 	return board
 
 
@@ -111,11 +110,14 @@ def get_cells(boards, i, j):
 	Outputs:
 		- list of Cell objects
 	"""
+	unit_cells = []
 	cells = []
 	for board in boards:
 		if board[j][i] is not None:
+			if board[j][i].hasUnit():
+				unit_cells.append(board[j][i])
 			cells.append(board[j][i])
-	return cells
+	return unit_cells, cells
 
 def find_unit(unit, grid, i, j, new_units):
 	"""
@@ -130,11 +132,12 @@ def find_unit(unit, grid, i, j, new_units):
 	for new_unit in new_units:
 		if new_unit.hash == unit.hash:
 			return True
-	for x in range(i-unit.movement,i+unit.movement+1):
-		for y in range(j-unit.movement,j+unit.movement+1):
-			if grid[y][x].cell is not None:
-				if grid[y][x].cell.hash is unit.hash:
-					return True
+	for x in range(max(i-unit.movement,0),min(i+unit.movement+1,len(grid[0]))):
+		for y in range(max(j-unit.movement,0),min(j+unit.movement+1,len(grid))):
+			if grid[y][x] is not None:
+				if grid[y][x].hasUnit():
+					if grid[y][x].unit.hash is unit.hash:
+						return True
 	return False
 
 
